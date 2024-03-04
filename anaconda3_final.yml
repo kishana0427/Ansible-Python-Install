@@ -1,0 +1,45 @@
+---
+- name: install Anaconda3 on ubuntu 22.04
+  hosts: all
+  become: yes
+  tasks:
+  - name: download file
+    get_url:
+      url: https://repo.anaconda.com/archive/Anaconda3-2024.02-1-Linux-x86_64.sh
+      dest: /home/mrcetece/Anaconda3-2024.02-1-Linux-x86_64.sh
+  - name: run shell script
+    shell: "cp /home/mrcetece/Anaconda3-2024.02-1-Linux-x86_64.sh /tmp/anaconda.sh"
+  - name: change perm
+    file:
+      dest: /tmp/anaconda.sh
+      mode: 755
+  - name: sha conv
+    shell:
+      sha256sum /tmp/anaconda.sh
+  - name: create folder
+    file:
+      path: /home/mrcetece/anaconda3
+      state: directory
+      recurse: yes
+  - name: run anaconda sript
+    shell:
+      sh /tmp/anaconda.sh -b -u -p /home/mrcetece/anaconda3
+    args:
+      executable: 
+        /bin/bash
+  - name: add env path
+    lineinfile:
+      dest: /home/mrcetece/.bashrc
+      line: 'export PATH="$HOME/anaconda3/bin:$PATH"'
+      state: present
+  - name: source bash
+    shell:
+      source ~/.bashrc
+    args:
+      executable:
+        /bin/bash
+    register: result1
+  - name: debug out
+    debug:
+      msg: "{{result1}}"
+  

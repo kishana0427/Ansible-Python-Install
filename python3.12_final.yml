@@ -1,0 +1,41 @@
+---
+- hosts: pythontest
+  become: yes
+  tasks:
+    - name: update system
+      shell:
+        "apt-get update -y && apt upgrade -y"
+    - name: Install soft-prop-common
+      shell:
+        "apt-get install software-properties-common -y"
+    - name: add repo link
+      shell:
+        "add-apt-repository ppa:deadsnakes/ppa -y"
+    - name: update link
+      shell:
+        "apt-get update -y"
+    - name: Install python3.12
+      shell:
+        "apt-get install python3.12 -y"
+    - name: check python version
+      shell:
+        "python3.12 --version"
+    - name: curl bootstrap link
+      shell:
+        "curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12"
+    - name: python ver
+      shell:
+        "python3.12 -V"
+    - name: update alias python3.12 to python 
+      shell:
+        echo "alias python=python3.12" >> /home/mrcetece/.bashrc
+      args:
+        executable:
+          /bin/bash
+    - name: update bash
+      shell:
+        source /home/mrcetece/.bashrc
+      args:
+        executable:
+          /bin/bash
+
