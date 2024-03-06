@@ -1,0 +1,12 @@
+- name: Copy shell script to remote host
+  hosts: 172.16.1.50
+  tasks:
+    - name: Copy script
+      ansible.builtin.copy:
+        src: /home/mrcetece/Desktop/Ansible_for_LAB/powershellscript.sh
+        dest: /home/mrcetece/Desktop/powershellscript.sh
+        mode: '0755'  # Optional: Set the execute permissions on the script
+
+    - name: Run shell script
+      ansible.builtin.command: /home/mrcetece/Desktop/powershellscript.sh
+
