@@ -1,0 +1,18 @@
+---
+- name: Configure power settings and idle-delay on Ubuntu 22.04
+  hosts: 172.16.1.50
+  become: yes
+  tasks:
+    - name: Install dbus-x11 package
+      ansible.builtin.package:
+        name: dbus-x11
+        state: present
+
+    - name: Set the idle delay to 300 seconds (5 minutes)
+      shell: dbus-launch --exit-with-session gsettings set org.gnome.desktop.session idle-delay 300
+      register: sys_out
+
+    - name: Print result
+      debug:
+        msg: "{{ sys_out }}"
+
